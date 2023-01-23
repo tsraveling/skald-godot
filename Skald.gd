@@ -1,6 +1,7 @@
 extends Node
 
-class_name Skald
+signal skald_signal
+signal did_update_state(key, val)
 
 ## The primary Skald node, used to run Skald JSON files.
 ##
@@ -112,7 +113,7 @@ func get_next(choice_index: int, state: SkaldState):
 	
 	# First grab the section
 	var section = skald_object.sections[state.section]
-	if not section:
+	if section == null:
 		err("Invalid section at %d" % state.section)
 	
 	# Get available choices
@@ -130,7 +131,7 @@ func get_next(choice_index: int, state: SkaldState):
 			_step_forward(state, section)
 	else:
 		var block = section.blocks[state.block]
-		if not block:
+		if block == null:
 			err("Invalid block at %d, %d" % [state.section, state.block])
 		
 		# We process transitiion here, after the user has applied input. Mutations etc. were
@@ -178,6 +179,7 @@ func _process_meta(meta: Dictionary, state: SkaldState):
 				state.state[mutation.input] += mutation.value
 			"-=":
 				state.state[mutation.input] -= mutation.value
+		emit_signal("did_update_state", mutation.input, state.state[mutation.input])
 	
 	# Signals
 	for sig in meta.signals:
@@ -280,10 +282,10 @@ func _process_from(state: SkaldState):
 		# First get the actual section and block
 		var section = skald_object.sections[state.section]
 		var block = section.blocks[state.block]
-		if not section:
+		if section == null:
 			err("Invalid Skald section at %d" % state.section)
 			return
-		if not block:
+		if block == null:
 			err("Invalid Skald block at section %d, block %d" % [state.section, state.block])
 			return
 		
@@ -365,7 +367,7 @@ func _check_conditions(meta: Dictionary, state: SkaldState):
 
 
 func _find_section_index(tag: String):
-	if !skald_object.sections:
+	if skald_object.sections == null:
 		err("Invalid skald file, aborting.")
 		return -1
 	
@@ -383,29 +385,23 @@ func _find_section_index(tag: String):
 ## the engine up at the start of the script. Will throw errors if JSON is invalid, or if
 ## Skald file is empty.
 func load(_filename):
-	var file = File.new()
-	if !file.file_exists(_filename):
+	if not FileAccess.file_exists(_filename):
 		err("File does not exist")
 		return
-		
-	file_name = _filename
-	file.open(_filename, File.READ)
 	
-	var test_json_conv = JSON.new()
-	test_json_conv.parse(file.get_as_text())
-	var result = test_json_conv.get_data()
-	if result.error != OK:
+	# Load the contents of the file
+	file_name = _filename
+	var file = FileAccess.open(_filename, FileAccess.READ)
+	var contents = file.get_as_text()
+	
+	# Parse the data out of it
+	skald_object = JSON.parse_string(contents)
+	if skald_object == null:
 		err("Could not parse JSON: " + _filename)
 		return
-	
-	# Actually get the data
-	skald_object = result.result
-	
-	# Close the file
-	file.close()
 
 	# Get the first section (if there is one)
-	if skald_object.sections.size() < 1:
+	if len(skald_object.sections) < 1:
 		err("Skald file has no sections, aborting")
 		return
 		
@@ -421,4 +417,3 @@ func warn(msg: String):
 func _ready():
 	_injection_regex = RegEx.new()
 	_injection_regex.compile("{[a-zA-Z0-9_]+}")
-	self.load(loadAtStart)
