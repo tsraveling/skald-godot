@@ -94,15 +94,6 @@ var _injection_regex: RegEx
 
 # PUBLIC INTERFACE
 
-## This function just returns the array of inputs, which can be used to optimize state injection
-## checked the client side.
-func get_inputs():
-	if !skald_object.inputs:
-		err("Invalid skald file, no inputs found.")
-		return
-	
-	return skald_object.inputs
-
 
 ## This function is called to get the next content block. It will automatically process
 ## logic, bypass logical blocks, and perform transitions. It returns a SkaldResponse object,
@@ -146,13 +137,13 @@ func get_next(choice_index: int, state: SkaldState):
 ## This function is called to get an "initial node", ie, to jump into a particular section,
 ## or just straight into the beginning of the Skald script (aka, the first section) if no
 ## start_tag argument is provided.
-func get_first(game_state: Dictionary, start_tag = null):
+func get_first(game_state: Dictionary, start_tag = null) -> SkaldResponse:
 	var state = SkaldState.new()
 	if start_tag:
 		state.section = _find_section_index(start_tag)
 		if state.section < 0:
 			err("Section tag not found: %s" % start_tag)
-			return
+			return null
 	else:
 		state.section = 0
 	state.block = 0
@@ -274,7 +265,7 @@ func _get_skald_content(block: Dictionary, section: Dictionary, state: SkaldStat
 ## is found. If it is the last attributed block in the section, any choices checked that section
 ## will be returned as well. If there are no choices, the player will automatically
 ## transition to the next section in sequence.
-func _process_from(state: SkaldState):
+func _process_from(state: SkaldState) -> SkaldResponse:
 	
 	# Now loop until we are ready to return a response:
 	while true:
@@ -284,10 +275,10 @@ func _process_from(state: SkaldState):
 		var block = section.blocks[state.block]
 		if section == null:
 			err("Invalid Skald section at %d" % state.section)
-			return
+			return null
 		if block == null:
 			err("Invalid Skald block at section %d, block %d" % [state.section, state.block])
-			return
+			return null
 		
 		# Then we check the conditions for this block
 		var skip_auto_transition = false
@@ -328,6 +319,7 @@ func _process_from(state: SkaldState):
 			# If we have gotten this far, proceed to the next block
 			if not skip_auto_transition:
 				_step_forward(state, section)
+	return null
 	
 
 ## Checks a condition (input / value / operator) array. All conditions must be met to pass.
