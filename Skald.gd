@@ -100,12 +100,13 @@ var _injection_regex: RegEx
 ## with text content to display, sometimes choices, and an updated state obejct. The client is
 ## responsible for storing this state object and potentially modifying it external to the Skald
 ## script itself. Provide the selected SkaldChoice if there is one, or null if not.
-func get_next(choice_index: int, state: SkaldState):
+func get_next(choice_index: int, state: SkaldState) -> SkaldResponse:
 	
 	# First grab the section
 	var section = skald_object.sections[state.section]
 	if section == null:
 		err("Invalid section at %d" % state.section)
+		return null
 	
 	# Get available choices
 	var choices = _available_choices(state, section)
@@ -124,6 +125,7 @@ func get_next(choice_index: int, state: SkaldState):
 		var block = section.blocks[state.block]
 		if block == null:
 			err("Invalid block at %d, %d" % [state.section, state.block])
+			return null
 		
 		# We process transitiion here, after the user has applied input. Mutations etc. were
 		# applied when the text was displayed.
