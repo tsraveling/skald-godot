@@ -66,12 +66,12 @@ class SkaldChoice:
 ## not initialized by teh client.
 class SkaldResponse:
 	var content : SkaldContent
-	var choices : Array
+	var choices : Array[SkaldChoice]
 	var updated_state: SkaldState
 	var end_with # Can be int, string, or bool. `true` by default.
 	
 	func _init(content : SkaldContent, \
-			choices: Array, \
+			choices: Array[SkaldChoice], \
 			updated_state: SkaldState, \
 			end_with):
 		self.content = content
@@ -194,7 +194,7 @@ func _process_transition(meta: Dictionary, state: SkaldState):
 	return false
 		
 
-func _choices_from_block(section: Dictionary, state: SkaldState):
+func _choices_from_block(section: Dictionary, state: SkaldState) -> Array[SkaldChoice]:
 	var choices = []
 	for i in len(section.choices):
 		var choice = section.choices[i]
