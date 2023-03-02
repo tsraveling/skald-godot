@@ -1,6 +1,6 @@
 extends Node
 
-signal skald_signal
+signal skald_signal(sig: String, value)
 signal did_update_state(key, val)
 
 ## The primary Skald node, used to run Skald JSON files.
@@ -66,12 +66,12 @@ class SkaldChoice:
 ## not initialized by teh client.
 class SkaldResponse:
 	var content : SkaldContent
-	var choices : Array[SkaldChoice]
+	var choices : Array
 	var updated_state: SkaldState
 	var end_with # Can be int, string, or bool. `true` by default.
 	
 	func _init(content : SkaldContent, \
-			choices: Array[SkaldChoice], \
+			choices: Array, \
 			updated_state: SkaldState, \
 			end_with):
 		self.content = content
@@ -179,7 +179,7 @@ func _process_meta(meta: Dictionary, state: SkaldState):
 		if sig.has('value'):
 			emit_signal("skald_signal", sig['signal'], sig['value'])
 		else:
-			emit_signal("skald_signal", sig['signal'])
+			emit_signal("skald_signal", sig['signal'], null)
 
 
 ## Processes transition. Returns true if there is one, false if there isn't.
