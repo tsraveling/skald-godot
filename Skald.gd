@@ -47,8 +47,6 @@ class SkaldContent:
 	var content: String
 	
 	func _init(attribution_tag: String,content: String,section_tag: String):
-		# NEXT: Swap this out with explicit strings, then perform injections etc.
-		# back in the calling location.
 		self.attribution_tag = attribution_tag
 		self.content = content
 		self.section_tag = section_tag
