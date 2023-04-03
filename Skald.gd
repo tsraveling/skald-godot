@@ -193,7 +193,7 @@ func _process_transition(meta: Dictionary, state: SkaldState):
 		
 
 func _choices_from_block(section: Dictionary, state: SkaldState) -> Array[SkaldChoice]:
-	var choices = []
+	var choices: Array[SkaldChoice] = []
 	for i in len(section.choices):
 		var choice = section.choices[i]
 		if not _check_conditions(choice.meta, state):
