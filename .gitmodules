@@ -1,0 +1,6 @@
+[submodule "godot-cpp"]
+	path = godot-cpp
+	url = https://github.com/godotengine/godot-cpp.git
+[submodule "skald"]
+	path = skald
+	url = git@github.com:tsraveling/skald.git

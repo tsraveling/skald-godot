@@ -1,0 +1,12 @@
+[configuration]
+entry_symbol = "skald_init"
+compatibility_minimum = "4.2"
+reloadable = true
+
+[libraries]
+macos.debug = "res://addons/skald/bin/libskald_godot.macos.template_debug.universal.dylib"
+macos.release = "res://addons/skald/bin/libskald_godot.macos.template_release.universal.dylib"
+linux.debug.x86_64 = "res://addons/skald/bin/libskald_godot.linux.template_debug.x86_64.so"
+linux.release.x86_64 = "res://addons/skald/bin/libskald_godot.linux.template_release.x86_64.so"
+windows.debug.x86_64 = "res://addons/skald/bin/libskald_godot.windows.template_debug.x86_64.dll"
+windows.release.x86_64 = "res://addons/skald/bin/libskald_godot.windows.template_release.x86_64.dll"

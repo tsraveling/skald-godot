@@ -1,0 +1,17 @@
+# Build artifacts
+addons/skald/bin/
+*.o
+*.obj
+*.os
+
+# SCons
+.sconsign.dblite
+*.pyc
+__pycache__/
+
+# Godot
+.godot/
+
+# OS
+.DS_Store
+Thumbs.db
