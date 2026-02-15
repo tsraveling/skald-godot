@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.2 - 2026-02-15
+#### Bug Fixes
+- moved uint alias higher up - (ca9c905) - Tim Raveling
+
+- - -
+
 ## 0.2.1 - 2026-02-15
 #### Bug Fixes
 - got windows build working (#2) - (811e10c) - Tim Raveling
