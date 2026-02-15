@@ -10,13 +10,17 @@ env.Append(CPPPATH=[
     "skald/deps/pegtl/include/",
 ])
 
+# MSVC lacks the POSIX `uint` typedef — define it for all targets
+# that include skald.h (both skald sources and the wrapper).
+if env["platform"] == "windows":
+    env.Append(CPPDEFINES=[("uint", "unsigned int")])
+
 # Skald core sources need exceptions enabled (PEGTL requires them).
 # Clone the env so godot-cpp wrapper code stays exception-free.
 skald_env = env.Clone()
 
 if env["platform"] == "windows":
     skald_env.Append(CXXFLAGS=["/EHsc", "/std:c++20"])
-    skald_env.Append(CPPDEFINES=[("uint", "unsigned int")])
 else:
     skald_env.Append(CXXFLAGS=["-fexceptions", "-std=c++20"])
 
