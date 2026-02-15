@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.1 - 2026-02-15
+#### Bug Fixes
+- got windows build working (#2) - (811e10c) - Tim Raveling
+- match cocogitto tag format (no v prefix) in CI and bump hooks - (9f513fa) - Tim Raveling
+
+- - -
+
 ## 0.2.0 - 2026-02-14
 #### Features
 - adds auto-release pipeline - (97f18ca) - Tim Raveling
