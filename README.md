@@ -129,18 +129,39 @@ Pre-built binaries are provided for:
 - Linux x86_64
 - Windows x86_64
 
-## Building from source
+## Local development
 
-Requires Python 3 and [SCons](https://scons.org/).
+### Prerequisites
+
+- Python 3
+- [SCons](https://scons.org/) (`brew install scons` or `pip install scons`)
+
+### Build
 
 ```bash
 git clone --recursive https://github.com/tsraveling/skald-godot.git
 cd skald-godot
-scons          # debug build for current platform
-scons target=template_release   # release build
+scons                            # debug build for current platform
+scons target=template_release    # release build
 ```
 
-The built library goes into `addons/skald/bin/`.
+This produces a shared library in `addons/skald/bin/`.
+
+### Import into a Godot project
+
+Copy (or symlink) the `addons/skald/` directory into your Godot project:
+
+```bash
+cp -r addons/skald /path/to/your-project/addons/
+```
+
+Or symlink for faster iteration during development:
+
+```bash
+ln -s $(pwd)/addons/skald /path/to/your-project/addons/skald
+```
+
+Restart the editor. `SkaldEngine` and all response types will be available immediately.
 
 ## License
 
