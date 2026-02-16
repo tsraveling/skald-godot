@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.2.3 - 2026-02-16
+#### Bug Fixes
+- added write permissions to CI pipeline - (a5b492f) - Tim Raveling
+- adds SkaldOption type - (6e5e702) - Tim Raveling
+- added IDE docs support - (101202d) - Tim Raveling
+
+- - -
+
 ## 0.2.2 - 2026-02-15
 #### Bug Fixes
 - moved uint alias higher up - (ca9c905) - Tim Raveling
