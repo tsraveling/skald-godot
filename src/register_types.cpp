@@ -14,6 +14,7 @@ void initialize_skald_module(ModuleInitializationLevel p_level) {
 	}
 
 	ClassDB::register_class<SkaldEngine>();
+	ClassDB::register_class<SkaldOption>();
 	ClassDB::register_class<SkaldContent>();
 	ClassDB::register_class<SkaldQuery>();
 	ClassDB::register_class<SkaldExit>();

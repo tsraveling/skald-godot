@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldOption" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A dialogue option from Skald.
+	</brief_description>
+	<description>
+		Represents a single selectable option within a [SkaldContent] response.
+	</description>
+	<members>
+		<member name="text" type="String" setter="" getter="get_text" default="&quot;&quot;">
+			The option text.
+		</member>
+		<member name="is_available" type="bool" setter="" getter="get_is_available" default="true">
+			Whether this option is currently available for selection.
+		</member>
+	</members>
+</class>
