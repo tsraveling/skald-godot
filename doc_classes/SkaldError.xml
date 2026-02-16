@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldError" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		An error response from Skald.
+	</brief_description>
+	<description>
+		Indicates an error occurred during script parsing or execution.
+	</description>
+	<members>
+		<member name="code" type="int" setter="" getter="get_code" default="0">
+			The error code.
+		</member>
+		<member name="message" type="String" setter="" getter="get_message" default="&quot;&quot;">
+			The error message.
+		</member>
+		<member name="line_number" type="int" setter="" getter="get_line_number" default="0">
+			The line number where the error occurred.
+		</member>
+	</members>
+</class>

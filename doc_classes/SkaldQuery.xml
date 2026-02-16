@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldQuery" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A method call query from Skald.
+	</brief_description>
+	<description>
+		Represents a script-initiated method call. The game should handle the call and optionally provide an answer via [method SkaldEngine.answer].
+	</description>
+	<members>
+		<member name="method" type="String" setter="" getter="get_method" default="&quot;&quot;">
+			The method name being called.
+		</member>
+		<member name="args" type="Array" setter="" getter="get_args" default="[]">
+			The arguments passed to the method.
+		</member>
+		<member name="expects_response" type="bool" setter="" getter="get_expects_response" default="false">
+			Whether the script expects a return value via [method SkaldEngine.answer].
+		</member>
+	</members>
+	<methods>
+		<method name="get_arg_count" qualifiers="const">
+			<return type="int" />
+			<description>
+				Returns the number of arguments.
+			</description>
+		</method>
+		<method name="get_arg" qualifiers="const">
+			<return type="Variant" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Returns the argument at [param index].
+			</description>
+		</method>
+	</methods>
+</class>

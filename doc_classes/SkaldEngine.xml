@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldEngine" inherits="Node" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		Runs the Skald narrative scripting engine.
+	</brief_description>
+	<description>
+		Wraps the Skald narrative engine as a Godot node. Load a [code].ska[/code] script, then call [method start] to begin execution. Each method returns a response object ([SkaldContent], [SkaldQuery], [SkaldExit], [SkaldGoModule], [SkaldEnd], or [SkaldError]).
+	</description>
+	<methods>
+		<method name="load">
+			<return type="void" />
+			<param index="0" name="path" type="String" />
+			<description>
+				Loads a Skald script file from the given path.
+			</description>
+		</method>
+		<method name="start">
+			<return type="Variant" />
+			<description>
+				Starts execution from the beginning. Returns the first response.
+			</description>
+		</method>
+		<method name="start_at">
+			<return type="Variant" />
+			<param index="0" name="tag" type="String" />
+			<description>
+				Starts execution at the given tag. Returns the first response.
+			</description>
+		</method>
+		<method name="act">
+			<return type="Variant" />
+			<param index="0" name="choice_index" type="int" default="0" />
+			<description>
+				Advances the script. Pass [param choice_index] to select a dialogue option. Returns the next response.
+			</description>
+		</method>
+		<method name="get_current">
+			<return type="Variant" />
+			<description>
+				Returns the most recent response without advancing.
+			</description>
+		</method>
+		<method name="answer">
+			<return type="Variant" />
+			<param index="0" name="value" type="Variant" />
+			<description>
+				Provides a value in response to a [SkaldQuery]. Returns the next response.
+			</description>
+		</method>
+	</methods>
+</class>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldExit" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		An exit response from Skald.
+	</brief_description>
+	<description>
+		Indicates the script exited, optionally with a return value.
+	</description>
+	<members>
+		<member name="value" type="Variant" setter="" getter="get_value">
+			The exit value, if any.
+		</member>
+	</members>
+	<methods>
+		<method name="has_value" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if an exit value was provided.
+			</description>
+		</method>
+	</methods>
+</class>
