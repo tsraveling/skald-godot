@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldEnd" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		An end-of-script response from Skald.
+	</brief_description>
+	<description>
+		Indicates the script has reached its end with no further content.
+	</description>
+</class>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldContent" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A dialogue content response from Skald.
+	</brief_description>
+	<description>
+		Represents a line of dialogue or narration, optionally with selectable options.
+	</description>
+	<members>
+		<member name="attribution" type="String" setter="" getter="get_attribution" default="&quot;&quot;">
+			The speaker or source of this content.
+		</member>
+		<member name="text" type="String" setter="" getter="get_text" default="&quot;&quot;">
+			The dialogue or narration text.
+		</member>
+		<member name="option_count" type="int" setter="" getter="get_option_count" default="0">
+			Number of selectable options.
+		</member>
+	</members>
+	<methods>
+		<method name="get_option_text" qualifiers="const">
+			<return type="String" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Returns the text of the option at [param index].
+			</description>
+		</method>
+		<method name="is_option_available" qualifiers="const">
+			<return type="bool" />
+			<param index="0" name="index" type="int" />
+			<description>
+				Returns whether the option at [param index] is currently available.
+			</description>
+		</method>
+	</methods>
+</class>

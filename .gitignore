@@ -4,6 +4,9 @@ addons/skald/bin/
 *.obj
 *.os
 
+# Generated sources
+src/gen/
+
 # SCons
 .sconsign.dblite
 *.pyc

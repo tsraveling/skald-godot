@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldGoModule" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A module redirect response from Skald.
+	</brief_description>
+	<description>
+		Indicates the script wants to load and run a different module.
+	</description>
+	<members>
+		<member name="module_path" type="String" setter="" getter="get_module_path" default="&quot;&quot;">
+			Path of the module to load.
+		</member>
+		<member name="start_tag" type="String" setter="" getter="get_start_tag" default="&quot;&quot;">
+			Tag to start at within the module.
+		</member>
+	</members>
+</class>
