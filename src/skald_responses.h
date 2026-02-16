@@ -4,18 +4,35 @@
 #include <godot_cpp/classes/ref_counted.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/array.hpp>
-#include <godot_cpp/variant/packed_byte_array.hpp>
-#include <godot_cpp/variant/packed_string_array.hpp>
 #include <godot_cpp/variant/string.hpp>
 #include <godot_cpp/variant/variant.hpp>
+
+class SkaldOption : public godot::RefCounted {
+	GDCLASS(SkaldOption, godot::RefCounted)
+
+	godot::String text_;
+	bool is_available_ = true;
+
+protected:
+	static void _bind_methods();
+
+public:
+	SkaldOption() = default;
+	~SkaldOption() = default;
+
+	void set_text(const godot::String &p_text);
+	void set_is_available(bool p_available);
+
+	godot::String get_text() const;
+	bool get_is_available() const;
+};
 
 class SkaldContent : public godot::RefCounted {
 	GDCLASS(SkaldContent, godot::RefCounted)
 
 	godot::String attribution_;
 	godot::String text_;
-	godot::PackedStringArray option_texts_;
-	godot::PackedByteArray option_available_;
+	godot::Array options_;
 
 protected:
 	static void _bind_methods();
@@ -30,9 +47,8 @@ public:
 
 	godot::String get_attribution() const;
 	godot::String get_text() const;
+	godot::Array get_options() const;
 	int get_option_count() const;
-	godot::String get_option_text(int p_index) const;
-	bool is_option_available(int p_index) const;
 };
 
 class SkaldQuery : public godot::RefCounted {

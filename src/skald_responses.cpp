@@ -2,17 +2,33 @@
 
 using namespace godot;
 
+// --- SkaldOption ---
+
+void SkaldOption::_bind_methods() {
+	ClassDB::bind_method(D_METHOD("get_text"), &SkaldOption::get_text);
+	ClassDB::bind_method(D_METHOD("get_is_available"), &SkaldOption::get_is_available);
+
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "text"), "", "get_text");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_available"), "", "get_is_available");
+}
+
+void SkaldOption::set_text(const String &p_text) { text_ = p_text; }
+void SkaldOption::set_is_available(bool p_available) { is_available_ = p_available; }
+
+String SkaldOption::get_text() const { return text_; }
+bool SkaldOption::get_is_available() const { return is_available_; }
+
 // --- SkaldContent ---
 
 void SkaldContent::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_attribution"), &SkaldContent::get_attribution);
 	ClassDB::bind_method(D_METHOD("get_text"), &SkaldContent::get_text);
+	ClassDB::bind_method(D_METHOD("get_options"), &SkaldContent::get_options);
 	ClassDB::bind_method(D_METHOD("get_option_count"), &SkaldContent::get_option_count);
-	ClassDB::bind_method(D_METHOD("get_option_text", "index"), &SkaldContent::get_option_text);
-	ClassDB::bind_method(D_METHOD("is_option_available", "index"), &SkaldContent::is_option_available);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "attribution"), "", "get_attribution");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "text"), "", "get_text");
+	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "options"), "", "get_options");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "option_count"), "", "get_option_count");
 }
 
@@ -20,27 +36,17 @@ void SkaldContent::set_attribution(const String &p_attribution) { attribution_ =
 void SkaldContent::set_text(const String &p_text) { text_ = p_text; }
 
 void SkaldContent::add_option(const String &p_text, bool p_available) {
-	option_texts_.push_back(p_text);
-	option_available_.push_back(p_available ? 1 : 0);
+	Ref<SkaldOption> option;
+	option.instantiate();
+	option->set_text(p_text);
+	option->set_is_available(p_available);
+	options_.push_back(option);
 }
 
 String SkaldContent::get_attribution() const { return attribution_; }
 String SkaldContent::get_text() const { return text_; }
-int SkaldContent::get_option_count() const { return option_texts_.size(); }
-
-String SkaldContent::get_option_text(int p_index) const {
-	if (p_index < 0 || p_index >= option_texts_.size()) {
-		return String();
-	}
-	return option_texts_[p_index];
-}
-
-bool SkaldContent::is_option_available(int p_index) const {
-	if (p_index < 0 || p_index >= option_available_.size()) {
-		return false;
-	}
-	return option_available_[p_index] != 0;
-}
+Array SkaldContent::get_options() const { return options_; }
+int SkaldContent::get_option_count() const { return options_.size(); }
 
 // --- SkaldQuery ---
 
