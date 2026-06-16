@@ -27,6 +27,8 @@ else:
 skald_sources = [
     skald_env.SharedObject("skald/src/skald.cpp"),
     skald_env.SharedObject("skald/src/debug.cpp"),
+    skald_env.SharedObject("skald/src/parse_state.cpp"),
+    skald_env.SharedObject("skald/src/codex_parse_state.cpp"),
 ]
 
 # GDExtension wrapper sources (no exceptions needed)

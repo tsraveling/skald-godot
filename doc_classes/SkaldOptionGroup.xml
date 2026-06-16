@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldOptionGroup" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A set of selectable options from Skald.
+	</brief_description>
+	<description>
+		As of Skald 0.6, options arrive as their own response rather than being nested in [SkaldContent]. Present the options to the player, then advance with [method SkaldEngine.act], passing the selected index.
+	</description>
+	<members>
+		<member name="options" type="Array" setter="" getter="get_options" default="[]">
+			Array of [SkaldOption] objects.
+		</member>
+		<member name="count" type="int" setter="" getter="get_count" default="0">
+			Number of options.
+		</member>
+	</members>
+</class>

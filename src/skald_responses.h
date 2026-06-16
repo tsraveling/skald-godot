@@ -4,6 +4,7 @@
 #include <godot_cpp/classes/ref_counted.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/array.hpp>
+#include <godot_cpp/variant/dictionary.hpp>
 #include <godot_cpp/variant/string.hpp>
 #include <godot_cpp/variant/variant.hpp>
 
@@ -32,7 +33,6 @@ class SkaldContent : public godot::RefCounted {
 
 	godot::String attribution_;
 	godot::String text_;
-	godot::Array options_;
 
 protected:
 	static void _bind_methods();
@@ -43,12 +43,27 @@ public:
 
 	void set_attribution(const godot::String &p_attribution);
 	void set_text(const godot::String &p_text);
-	void add_option(const godot::String &p_text, bool p_available);
 
 	godot::String get_attribution() const;
 	godot::String get_text() const;
+};
+
+class SkaldOptionGroup : public godot::RefCounted {
+	GDCLASS(SkaldOptionGroup, godot::RefCounted)
+
+	godot::Array options_;
+
+protected:
+	static void _bind_methods();
+
+public:
+	SkaldOptionGroup() = default;
+	~SkaldOptionGroup() = default;
+
+	void add_option(const godot::String &p_text, bool p_available);
+
 	godot::Array get_options() const;
-	int get_option_count() const;
+	int get_count() const;
 };
 
 class SkaldQuery : public godot::RefCounted {
@@ -56,7 +71,6 @@ class SkaldQuery : public godot::RefCounted {
 
 	godot::String method_;
 	godot::Array args_;
-	bool expects_response_ = false;
 
 protected:
 	static void _bind_methods();
@@ -67,13 +81,33 @@ public:
 
 	void set_method(const godot::String &p_method);
 	void set_args(const godot::Array &p_args);
-	void set_expects_response(bool p_expects);
 
 	godot::String get_method() const;
 	godot::Array get_args() const;
 	int get_arg_count() const;
 	godot::Variant get_arg(int p_index) const;
-	bool get_expects_response() const;
+};
+
+class SkaldAction : public godot::RefCounted {
+	GDCLASS(SkaldAction, godot::RefCounted)
+
+	godot::String method_;
+	godot::Array args_;
+
+protected:
+	static void _bind_methods();
+
+public:
+	SkaldAction() = default;
+	~SkaldAction() = default;
+
+	void set_method(const godot::String &p_method);
+	void set_args(const godot::Array &p_args);
+
+	godot::String get_method() const;
+	godot::Array get_args() const;
+	int get_arg_count() const;
+	godot::Variant get_arg(int p_index) const;
 };
 
 class SkaldExit : public godot::RefCounted {
@@ -146,6 +180,53 @@ public:
 	int get_code() const;
 	godot::String get_message() const;
 	int get_line_number() const;
+};
+
+class SkaldParseResult : public godot::RefCounted {
+	GDCLASS(SkaldParseResult, godot::RefCounted)
+
+	bool ok_ = true;
+	godot::Array errors_;
+
+protected:
+	static void _bind_methods();
+
+public:
+	SkaldParseResult() = default;
+	~SkaldParseResult() = default;
+
+	void set_ok(bool p_ok);
+	// Appends one parse error. severity: 0 = warning, 1 = error.
+	void add_error(const godot::String &p_message, int p_line, int p_column,
+			const godot::String &p_source, int p_severity);
+
+	bool is_ok() const;
+	godot::Array get_errors() const;
+	int get_error_count() const;
+};
+
+class SkaldNotification : public godot::RefCounted {
+	GDCLASS(SkaldNotification, godot::RefCounted)
+
+	godot::String var_name_;
+	godot::String scope_;
+	godot::Variant value_;
+
+protected:
+	static void _bind_methods();
+
+public:
+	SkaldNotification() = default;
+	~SkaldNotification() = default;
+
+	void set_var_name(const godot::String &p_name);
+	void set_scope(const godot::String &p_scope);
+	void set_value(const godot::Variant &p_value);
+
+	godot::String get_var_name() const;
+	godot::String get_scope() const;
+	bool has_value() const;
+	godot::Variant get_value() const;
 };
 
 #endif // SKALD_RESPONSES_H

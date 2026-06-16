@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldParseResult" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		The result of parsing a codex or module.
+	</brief_description>
+	<description>
+		Returned by [method SkaldEngine.setup] and [method SkaldEngine.load]. Reports whether parsing succeeded and carries any errors or warnings encountered.
+	</description>
+	<members>
+		<member name="ok" type="bool" setter="" getter="is_ok" default="true">
+			[code]true[/code] if parsing produced no errors (warnings do not clear this flag... they leave it [code]true[/code]).
+		</member>
+		<member name="errors" type="Array" setter="" getter="get_errors" default="[]">
+			Array of [Dictionary] entries, one per parse problem. Each has keys [code]message[/code] ([String]), [code]line[/code] ([int]), [code]column[/code] ([int]), [code]source[/code] ([String]), and [code]severity[/code] ([int]: [code]0[/code] = warning, [code]1[/code] = error).
+		</member>
+		<member name="error_count" type="int" setter="" getter="get_error_count" default="0">
+			Number of entries in [member errors].
+		</member>
+	</members>
+</class>

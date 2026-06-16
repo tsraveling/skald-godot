@@ -22,12 +22,17 @@ public:
 	SkaldEngine();
 	~SkaldEngine();
 
-	void load(const godot::String &p_path);
+	godot::Variant setup(const godot::String &p_path);
+	godot::Variant load(const godot::String &p_path);
 	godot::Variant start();
 	godot::Variant start_at(const godot::String &p_tag);
 	godot::Variant act(int p_choice_index = 0);
+	godot::Variant continue_();
 	godot::Variant get_current();
 	godot::Variant answer(const godot::Variant &p_value);
+
+	godot::Variant set_global(const godot::String &p_key, const godot::Variant &p_value);
+	godot::Variant get_global(const godot::String &p_key);
 };
 
 #endif // SKALD_ENGINE_H

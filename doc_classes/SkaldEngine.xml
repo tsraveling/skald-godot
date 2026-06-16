@@ -4,14 +4,21 @@
 		Runs the Skald narrative scripting engine.
 	</brief_description>
 	<description>
-		Wraps the Skald narrative engine as a Godot node. Load a [code].ska[/code] script, then call [method start] to begin execution. Each method returns a response object ([SkaldContent], [SkaldQuery], [SkaldExit], [SkaldGoModule], [SkaldEnd], or [SkaldError]).
+		Wraps the Skald narrative engine as a Godot node. Optionally call [method setup] to load a [code].codex[/code] project (defining globals and methods), then [method load] a [code].ska[/code] module and call [method start] to begin execution. Each advancing method returns a response object ([SkaldContent], [SkaldOptionGroup], [SkaldQuery], [SkaldAction], [SkaldExit], [SkaldGoModule], [SkaldEnd], [SkaldNotification], or [SkaldError]).
 	</description>
 	<methods>
-		<method name="load">
-			<return type="void" />
+		<method name="setup">
+			<return type="SkaldParseResult" />
 			<param index="0" name="path" type="String" />
 			<description>
-				Loads a Skald script file from the given path.
+				Loads a [code].codex[/code] project file, which defines global variables and method signatures, and establishes the project root for relative [code]GO[/code] module paths. Returns a [SkaldParseResult] describing whether parsing succeeded and any errors encountered. Globals persist across module loads for the lifetime of the engine.
+			</description>
+		</method>
+		<method name="load">
+			<return type="SkaldParseResult" />
+			<param index="0" name="path" type="String" />
+			<description>
+				Loads a single Skald [code].ska[/code] module from the given path. Returns a [SkaldParseResult] describing whether parsing succeeded and any errors encountered.
 			</description>
 		</method>
 		<method name="start">
@@ -31,7 +38,13 @@
 			<return type="Variant" />
 			<param index="0" name="choice_index" type="int" default="0" />
 			<description>
-				Advances the script. Pass [param choice_index] to select a dialogue option. Returns the next response.
+				Advances the script. Pass [param choice_index] to select an option from a [SkaldOptionGroup], or [code]0[/code] for any non-choice response (including a [SkaldAction]). Returns the next response.
+			</description>
+		</method>
+		<method name="advance">
+			<return type="Variant" />
+			<description>
+				Convenience method that advances the script past a non-choice response. Identical to calling [code]act(0)[/code]. Use this for [SkaldContent], [SkaldAction], and [SkaldNotification] responses where there is no choice to make.
 			</description>
 		</method>
 		<method name="get_current">
@@ -44,7 +57,22 @@
 			<return type="Variant" />
 			<param index="0" name="value" type="Variant" />
 			<description>
-				Provides a value in response to a [SkaldQuery]. Returns the next response.
+				Provides a return value in response to a [SkaldQuery] (a method call that expects a result). Pass [code]int[/code], [code]float[/code], [code]String[/code], [code]bool[/code], or [code]null[/code]. Returns the next response. Do not use this for a [SkaldAction] — advance those with [method act] or [method advance].
+			</description>
+		</method>
+		<method name="set_global">
+			<return type="Variant" />
+			<param index="0" name="key" type="String" />
+			<param index="1" name="value" type="Variant" />
+			<description>
+				Sets a global variable defined by the codex. [param value] must be a [code]bool[/code], [code]int[/code], [code]float[/code], or [code]String[/code]. Returns [code]null[/code] on success, or a [SkaldError] if the global is undefined or the type does not match. Globals persist across module loads.
+			</description>
+		</method>
+		<method name="get_global">
+			<return type="Variant" />
+			<param index="0" name="key" type="String" />
+			<description>
+				Returns the value of a global variable defined by the codex, or a [SkaldError] if it is not set.
 			</description>
 		</method>
 	</methods>

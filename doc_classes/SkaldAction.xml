@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<class name="SkaldQuery" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+<class name="SkaldAction" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
 	<brief_description>
-		A method call query from Skald.
+		A fire-and-forget method call from Skald.
 	</brief_description>
 	<description>
-		Represents a script-initiated method call that expects a return value (a [code]get[/code]). The game should handle the call and provide a return value via [method SkaldEngine.answer]. A method call that does not expect a return value arrives as a [SkaldAction] instead, and must be advanced with [method SkaldEngine.act] (or [method SkaldEngine.advance]).
+		Represents a script-initiated method call that does [b]not[/b] expect a return value (a [code]post[/code]). Handle the call for its side effects, then advance with [method SkaldEngine.act] or [method SkaldEngine.advance]. Do not call [method SkaldEngine.answer] for an action — doing so returns a [code]RESOLUTION_QUEUE_EMPTY[/code] error. A method call that expects a return value arrives as a [SkaldQuery] instead.
 	</description>
 	<members>
 		<member name="method" type="String" setter="" getter="get_method" default="&quot;&quot;">

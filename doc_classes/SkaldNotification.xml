@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="SkaldNotification" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+	<brief_description>
+		A state-mutation notification from Skald.
+	</brief_description>
+	<description>
+		Emitted when the script mutates a variable, letting the host observe state changes. Read the values, then advance with [method SkaldEngine.act] or [method SkaldEngine.advance].
+	</description>
+	<members>
+		<member name="var_name" type="String" setter="" getter="get_var_name" default="&quot;&quot;">
+			The name of the variable that was mutated.
+		</member>
+		<member name="scope" type="String" setter="" getter="get_scope" default="&quot;&quot;">
+			The scope of the mutated variable: [code]global[/code], [code]module[/code], or [code]local[/code].
+		</member>
+		<member name="value" type="Variant" setter="" getter="get_value">
+			The resolved new value of the variable, or [code]null[/code] if none was produced.
+		</member>
+	</members>
+	<methods>
+		<method name="has_value" qualifiers="const">
+			<return type="bool" />
+			<description>
+				Returns [code]true[/code] if a resolved value is present.
+			</description>
+		</method>
+	</methods>
+</class>

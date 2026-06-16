@@ -8,7 +8,7 @@
 	</description>
 	<members>
 		<member name="code" type="int" setter="" getter="get_code" default="0">
-			The error code.
+			The error code. One of: [code]0[/code] UNKNOWN, [code]1[/code] EOF, [code]2[/code] EMPTY_MODULE, [code]3[/code] MODULE_TAG_NOT_FOUND, [code]4[/code] CHOICE_OUT_OF_BOUNDS, [code]5[/code] CHOICE_UNAVAILABLE, [code]6[/code] EXPECTED_ANSWER, [code]7[/code] RESOLUTION_QUEUE_EMPTY, [code]8[/code] TYPE_MISMATCH, [code]9[/code] UNEXPECTED_NULL, [code]10[/code] VAR_UNDEFINED, [code]11[/code] UNEXPECTED_ACT, [code]12[/code] LOADING_MODULE, [code]13[/code] NO_GLOBAL, [code]14[/code] OUT_OF_BOUNDS, [code]15[/code] START_EMPTY_BLOCK.
 		</member>
 		<member name="message" type="String" setter="" getter="get_message" default="&quot;&quot;">
 			The error message.

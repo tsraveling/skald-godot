@@ -26,28 +26,47 @@ var engine := SkaldEngine.new()
 
 func _ready():
     add_child(engine)
-    engine.load("res://dialogue/intro.ska")
-    var response = engine.start()
-    handle(response)
+    # A codex (optional) defines globals + methods and the project root.
+    engine.setup("res://dialogue/project.codex")
+    var result = engine.load("res://dialogue/intro.ska")
+    if not result.ok:
+        for err in result.errors:
+            push_error("Parse error (line %d): %s" % [err.line, err.message])
+        return
+    handle(engine.start())
 
 func handle(response):
     if response is SkaldContent:
         print(response.attribution, ": ", response.text)
-        for i in response.option_count:
-            if response.is_option_available(i):
-                print("  [%d] %s" % [i, response.get_option_text(i)])
+        handle(engine.advance())                 # nothing to choose — advance
+    elif response is SkaldOptionGroup:
+        # Options are now their OWN response, not nested in content.
+        for i in response.count:
+            var opt = response.options[i]
+            if opt.is_available:
+                print("  [%d] %s" % [i, opt.text])
+        # ... later, once the player picks: handle(engine.act(index))
     elif response is SkaldQuery:
-        # The script is calling a method you define — respond with answer()
-        var result = process_query(response.method, response.args)
-        handle(engine.answer(result))
+        # A method call that EXPECTS a return value — reply with answer().
+        var value = process_query(response.method, response.args)
+        handle(engine.answer(value))
+    elif response is SkaldAction:
+        # A fire-and-forget method call — run it, then advance (do NOT answer).
+        run_action(response.method, response.args)
+        handle(engine.advance())
+    elif response is SkaldNotification:
+        print("set %s (%s) = %s" % [response.var_name, response.scope, response.value])
+        handle(engine.advance())
+    elif response is SkaldGoModule:
+        engine.load(response.module_path)
+        handle(engine.start_at(response.start_tag) if response.start_tag else engine.start())
     elif response is SkaldEnd:
         print("-- end --")
     elif response is SkaldError:
         push_error("Skald error %d: %s" % [response.code, response.message])
 
 func _on_choice_selected(index: int):
-    var response = engine.act(index)
-    handle(response)
+    handle(engine.act(index))
 ```
 
 You can also add `SkaldEngine` directly to your scene tree in the editor — it appears in the node list like any other node.
@@ -58,12 +77,18 @@ You can also add `SkaldEngine` directly to your scene tree in the editor — it 
 
 | Method | Description |
 |---|---|
-| `load(path: String)` | Parse a `.ska` file. |
+| `setup(path: String) -> SkaldParseResult` | Load a `.codex` project (globals, methods, project root). Optional. |
+| `load(path: String) -> SkaldParseResult` | Parse a single `.ska` module. |
 | `start() -> Variant` | Begin at the first block. Returns a response. |
 | `start_at(tag: String) -> Variant` | Begin at a specific block tag. |
-| `act(choice_index: int = 0) -> Variant` | Advance after a content response. Pass the player's choice index, or 0 to continue. |
+| `act(choice_index: int = 0) -> Variant` | Advance. Pass an option index for a `SkaldOptionGroup`, or `0` otherwise. |
+| `advance() -> Variant` | Convenience for `act(0)` — advance past any non-choice response. |
 | `get_current() -> Variant` | Re-read the most recent response without advancing. |
-| `answer(value) -> Variant` | Reply to a query. Pass `int`, `float`, `String`, `bool`, or `null`. |
+| `answer(value) -> Variant` | Reply to a `SkaldQuery`. Pass `int`, `float`, `String`, `bool`, or `null`. |
+| `set_global(key: String, value) -> Variant` | Set a codex global. Returns `null`, or a `SkaldError`. |
+| `get_global(key: String) -> Variant` | Get a codex global, or a `SkaldError`. |
+
+`setup()` and `load()` return a **SkaldParseResult** (`ok: bool`, `errors: Array`, `error_count: int`); each entry in `errors` is a Dictionary with `message`, `line`, `column`, `source`, and `severity` (`0` = warning, `1` = error). Globals set via `set_global` / declared in the codex persist across module loads for the engine's lifetime.
 
 Every method that returns `Variant` returns one of the response types below. Use `is` to branch:
 
@@ -74,26 +99,42 @@ if response is SkaldContent:
 
 ### Response types
 
-**SkaldContent** — narrative text to display.
+**SkaldContent** — narrative text to display. (Options are no longer carried here — see `SkaldOptionGroup`.)
 
-| Property / Method | Type |
+| Property | Type |
 |---|---|
 | `text` | `String` |
 | `attribution` | `String` — speaker tag, or `""` |
-| `option_count` | `int` |
-| `get_option_text(index)` | `String` |
-| `is_option_available(index)` | `bool` |
 
-**SkaldQuery** — the script is calling an external method.
+**SkaldOptionGroup** — a set of choices, delivered as its own response.
+
+| Property / Method | Type |
+|---|---|
+| `count` | `int` |
+| `options` | `Array` of `SkaldOption` (`text: String`, `is_available: bool`) |
+
+Present the options, then call `engine.act(index)` with the chosen index.
+
+**SkaldQuery** — a method call that expects a return value (a *get*).
 
 | Property / Method | Type |
 |---|---|
 | `method` | `String` |
 | `args` | `Array` |
-| `expects_response` | `bool` |
 | `get_arg(index)` | `Variant` |
 
 Respond with `engine.answer(value)` where `value` is the appropriate type, or `null`.
+
+**SkaldAction** — a fire-and-forget method call (a *post*). Same shape as `SkaldQuery`, but it expects **no** return value. Handle the side effect, then `engine.act()` / `engine.advance()`. Calling `answer()` on an action returns a `RESOLUTION_QUEUE_EMPTY` error.
+
+**SkaldNotification** — a variable was mutated; observe state changes here.
+
+| Property / Method | Type |
+|---|---|
+| `var_name` | `String` |
+| `scope` | `String` — `"global"`, `"module"`, or `"local"` |
+| `has_value()` | `bool` |
+| `value` | `Variant` — the resolved new value, or `null` |
 
 **SkaldExit** — the script hit an `EXIT` statement.
 

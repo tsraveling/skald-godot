@@ -16,11 +16,15 @@ void initialize_skald_module(ModuleInitializationLevel p_level) {
 	ClassDB::register_class<SkaldEngine>();
 	ClassDB::register_class<SkaldOption>();
 	ClassDB::register_class<SkaldContent>();
+	ClassDB::register_class<SkaldOptionGroup>();
 	ClassDB::register_class<SkaldQuery>();
+	ClassDB::register_class<SkaldAction>();
 	ClassDB::register_class<SkaldExit>();
 	ClassDB::register_class<SkaldGoModule>();
 	ClassDB::register_class<SkaldEnd>();
 	ClassDB::register_class<SkaldError>();
+	ClassDB::register_class<SkaldNotification>();
+	ClassDB::register_class<SkaldParseResult>();
 }
 
 void uninitialize_skald_module(ModuleInitializationLevel p_level) {
