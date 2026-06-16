@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.1 - 2026-06-16
+#### Bug Fixes
+- updated icon - (5bf0339) - Tim Raveling
+
+- - -
+
 ## 0.3.0 - 2026-06-16
 #### Features
 - 0.6 Skald engine updates - (f9b844a) - Tim Raveling
