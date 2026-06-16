@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.0 - 2026-06-16
+#### Features
+- 0.6 Skald engine updates - (f9b844a) - Tim Raveling
+#### Bug Fixes
+- added write permissions to CI pipeline - (b1d22fc) - Tim Raveling
+- adds SkaldOption type - (278bf9e) - Tim Raveling
+- added IDE docs support - (e379467) - Tim Raveling
+- moved uint alias higher up - (d7221ca) - Tim Raveling
+- got windows build working (#2) - (c2d2793) - Tim Raveling
+- match cocogitto tag format (no v prefix) in CI and bump hooks - (91ae71d) - Tim Raveling
+#### Miscellaneous Chores
+- (**version**) 0.2.3 - (af49145) - Tim Raveling
+- (**version**) 0.2.2 - (da8c9a8) - Tim Raveling
+- (**version**) 0.2.1 - (8769f88) - Tim Raveling
+
+- - -
+
 ## 0.2.3 - 2026-02-16
 #### Bug Fixes
 - added write permissions to CI pipeline - (a5b492f) - Tim Raveling
