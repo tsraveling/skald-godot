@@ -76,4 +76,9 @@
 			</description>
 		</method>
 	</methods>
+	<members>
+		<member name="codex_path" type="String" setter="set_codex_path" getter="get_codex_path" default="&quot;&quot;">
+			Path to a [code].codex[/code] project file, selectable in the inspector. If set, the engine automatically calls [method setup] with this path on [code]_ready[/code] at runtime (skipped in the editor). If left empty, a notice is printed to the console; load a codex yourself with [method setup] if you need globals or methods.
+		</member>
+	</members>
 </class>

@@ -1,6 +1,9 @@
 #include "skald_engine.h"
 #include "skald_responses.h"
 
+#include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
+
 #include <skald.h>
 
 using namespace godot;
@@ -182,6 +185,31 @@ void SkaldEngine::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("answer", "value"), &SkaldEngine::answer);
 	ClassDB::bind_method(D_METHOD("set_global", "key", "value"), &SkaldEngine::set_global);
 	ClassDB::bind_method(D_METHOD("get_global", "key"), &SkaldEngine::get_global);
+
+	ClassDB::bind_method(D_METHOD("set_codex_path", "path"), &SkaldEngine::set_codex_path);
+	ClassDB::bind_method(D_METHOD("get_codex_path"), &SkaldEngine::get_codex_path);
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "codex_path", PROPERTY_HINT_FILE, "*.codex"),
+			"set_codex_path", "get_codex_path");
+}
+
+void SkaldEngine::_ready() {
+	// Skip auto-setup in the editor; only load the codex at runtime.
+	if (Engine::get_singleton()->is_editor_hint()) {
+		return;
+	}
+	if (!codex_path_.is_empty()) {
+		setup(codex_path_);
+	} else {
+		UtilityFunctions::print("No Codex file set in inspector; implement in code with .setup(path) if you would like to use globals or methods.");
+	}
+}
+
+void SkaldEngine::set_codex_path(const String &p_path) {
+	codex_path_ = p_path;
+}
+
+String SkaldEngine::get_codex_path() const {
+	return codex_path_;
 }
 
 Variant SkaldEngine::setup(const String &p_path) {

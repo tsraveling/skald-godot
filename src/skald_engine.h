@@ -14,6 +14,7 @@ class SkaldEngine : public godot::Node {
 
 	std::unique_ptr<Skald::Engine> engine_;
 	godot::Variant current_response_;
+	godot::String codex_path_;
 
 protected:
 	static void _bind_methods();
@@ -21,6 +22,11 @@ protected:
 public:
 	SkaldEngine();
 	~SkaldEngine();
+
+	void _ready() override;
+
+	void set_codex_path(const godot::String &p_path);
+	godot::String get_codex_path() const;
 
 	godot::Variant setup(const godot::String &p_path);
 	godot::Variant load(const godot::String &p_path);
