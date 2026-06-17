@@ -4,7 +4,9 @@
 		A dialogue content response from Skald.
 	</brief_description>
 	<description>
-		Represents a line of dialogue or narration. As of Skald 0.6, options are no longer carried on content; they arrive as a separate [SkaldOptionGroup] response.
+		Represents a line of dialogue or narration. Sometimes has attribution.
+    .attribution: string
+    .text: string
 	</description>
 	<members>
 		<member name="attribution" type="String" setter="" getter="get_attribution" default="&quot;&quot;">

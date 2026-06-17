@@ -5,6 +5,9 @@
 	</brief_description>
 	<description>
 		Indicates an error occurred during script parsing or execution.
+    .code: int
+    .message: string
+    .line_number: int
 	</description>
 	<members>
 		<member name="code" type="int" setter="" getter="get_code" default="0">

@@ -5,6 +5,8 @@
 	</brief_description>
 	<description>
 		Represents a single selectable option within a [SkaldContent] response.
+    .text: string
+    .is_available: bool
 	</description>
 	<members>
 		<member name="text" type="String" setter="" getter="get_text" default="&quot;&quot;">

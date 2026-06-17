@@ -5,6 +5,9 @@
 	</brief_description>
 	<description>
 		Returned by [method SkaldEngine.setup] and [method SkaldEngine.load]. Reports whether parsing succeeded and carries any errors or warnings encountered.
+    .ok: bool
+    .errors: Array
+    .error_count: int
 	</description>
 	<members>
 		<member name="ok" type="bool" setter="" getter="is_ok" default="true">

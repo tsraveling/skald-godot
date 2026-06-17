@@ -5,6 +5,8 @@
 	</brief_description>
 	<description>
 		As of Skald 0.6, options arrive as their own response rather than being nested in [SkaldContent]. Present the options to the player, then advance with [method SkaldEngine.act], passing the selected index.
+    .options: Array
+    .count: int
 	</description>
 	<members>
 		<member name="options" type="Array" setter="" getter="get_options" default="[]">

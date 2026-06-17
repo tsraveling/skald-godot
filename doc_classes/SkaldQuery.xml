@@ -5,6 +5,10 @@
 	</brief_description>
 	<description>
 		Represents a script-initiated method call that expects a return value (a [code]get[/code]). The game should handle the call and provide a return value via [method SkaldEngine.answer]. A method call that does not expect a return value arrives as a [SkaldAction] instead, and must be advanced with [method SkaldEngine.act] (or [method SkaldEngine.advance]).
+    .method: string
+    .args: Array
+    .get_arg_count() -> int
+    .get_arg(index) -> Variant
 	</description>
 	<members>
 		<member name="method" type="String" setter="" getter="get_method" default="&quot;&quot;">

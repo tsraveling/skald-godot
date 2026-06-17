@@ -4,7 +4,9 @@
 		A module redirect response from Skald.
 	</brief_description>
 	<description>
-		Indicates the script wants to load and run a different module.
+		Indicates that Skald is about to load and run a different module. Just informational; no action needs to be taken.
+    .module_path: string
+    .start_tag: string
 	</description>
 	<members>
 		<member name="module_path" type="String" setter="" getter="get_module_path" default="&quot;&quot;">

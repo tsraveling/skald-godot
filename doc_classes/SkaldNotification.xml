@@ -5,6 +5,10 @@
 	</brief_description>
 	<description>
 		Emitted when the script mutates a variable, letting the host observe state changes. Read the values, then advance with [method SkaldEngine.act] or [method SkaldEngine.advance].
+    .var_name: string
+    .scope: string
+    .value: Variant
+    .has_value() -> bool
 	</description>
 	<members>
 		<member name="var_name" type="String" setter="" getter="get_var_name" default="&quot;&quot;">

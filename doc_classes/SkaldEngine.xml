@@ -4,7 +4,18 @@
 		Runs the Skald narrative scripting engine.
 	</brief_description>
 	<description>
-		Wraps the Skald narrative engine as a Godot node. Optionally call [method setup] to load a [code].codex[/code] project (defining globals and methods), then [method load] a [code].ska[/code] module and call [method start] to begin execution. Each advancing method returns a response object ([SkaldContent], [SkaldOptionGroup], [SkaldQuery], [SkaldAction], [SkaldExit], [SkaldGoModule], [SkaldEnd], [SkaldNotification], or [SkaldError]).
+    Wraps the Skald narrative engine as a Godot node. Optionally call [method setup] to load a [code].codex[/code] project (defining globals and methods), then [method load] a [code].ska[/code] module and call [method start] to begin execution.
+    Each advancing method returns a Response object ([SkaldContent], [SkaldOptionGroup], [SkaldQuery], [SkaldAction], [SkaldExit], [SkaldGoModule], [SkaldEnd], [SkaldNotification], or [SkaldError]).
+    .setup(path) -> SkaldParseResult: Call to load a Codex file, or set in inspector.
+    .load(path) -> SkaldParseResult: Loads a specific Skald file. 
+    .start() -> Variant(Response): Starts module at first block, and returns your first Response.
+    .start_at(tag) -> Variant(Response): Same, but start at a specific block. Block must have members.
+    .act(choice_index = 0) -> Variant(Response): Picks a specific option in an Option Group.
+    .advance() -> Variant(Response): Same as act(0). Continues script for all non-option responses.
+    .answer(value) -> Variant(Response): Use to respond to an open Query. Queries *must* be responded to with answer; all other types can be answered with act(n) or advance().
+    .set_global(key, value) -> Variant(Response): Sets a global variable; must be defined in codex.
+    .get_global(key) -> Variant(Response): Gets a global variable; must be defined in codex.
+    For other utility methods and attributes, see full documentation.
 	</description>
 	<methods>
 		<method name="setup">

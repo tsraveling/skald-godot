@@ -5,6 +5,8 @@
 	</brief_description>
 	<description>
 		Indicates the script exited, optionally with a return value.
+    .value: Variant
+    .has_value() -> bool
 	</description>
 	<members>
 		<member name="value" type="Variant" setter="" getter="get_value">
