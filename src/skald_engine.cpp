@@ -2,6 +2,7 @@
 #include "skald_responses.h"
 
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
 #include <skald.h>
@@ -171,7 +172,20 @@ static Variant convert_response(Skald::Response &response) {
 
 // --- SkaldEngine ---
 
-SkaldEngine::SkaldEngine() : engine_(std::make_unique<Skald::Engine>()) {}
+SkaldEngine::SkaldEngine() : engine_(std::make_unique<Skald::Engine>()) {
+	// Route all source reads (initial codex + every GO transition) through
+	// Godot's FileAccess so res:// URIs resolve in both editor and exported
+	// (.pck) builds, where assets never exist on the OS filesystem.
+	engine_->set_source_reader(
+			[](const std::string &resolved) -> std::optional<std::string> {
+				String gpath = String(resolved.c_str());
+				Ref<FileAccess> f = FileAccess::open(gpath, FileAccess::READ);
+				if (f.is_null()) {
+					return std::nullopt;
+				}
+				return std::string(f->get_as_text().utf8().get_data());
+			});
+}
 SkaldEngine::~SkaldEngine() = default;
 
 void SkaldEngine::_bind_methods() {
