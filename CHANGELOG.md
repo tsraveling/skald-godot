@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.2 - 2026-06-18
+#### Bug Fixes
+- adds custom godot file reader for .pck games - (f1733ef) - Tim Raveling
+- adds member annotation to IDE documentation - (04a134a) - Tim Raveling
+#### Miscellaneous Chores
+- skald bump - (555aed0) - Tim Raveling
+
+- - -
+
 ## 0.3.1 - 2026-06-16
 #### Bug Fixes
 - updated icon - (5bf0339) - Tim Raveling
