@@ -1,6 +1,6 @@
 # skald-godot
 
-**Version: 0.3.2**. Tracks [Skald 0.6.3](https://github.com/tsraveling/skald/releases/tag/0.6.3).
+**Version: 0.3.3**. Tracks [Skald 0.6.3](https://github.com/tsraveling/skald/releases/tag/0.6.3).
 
 A GDExtension that brings the [Skald](https://github.com/tsraveling/skald) narrative scripting engine into Godot as a native node. Write branching dialogue and interactive fiction in `.ska` files, then drive them from GDScript with a simple load/start/act loop.
 

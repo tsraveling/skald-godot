@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.3.3 - 2026-08-28
+#### Bug Fixes
+- update to track Skald 0.6.3 - (d78b571) - Tim Raveling
+
+- - -
+
 ## 0.3.2 - 2026-06-18
 #### Bug Fixes
 - adds custom godot file reader for .pck games - (f1733ef) - Tim Raveling
