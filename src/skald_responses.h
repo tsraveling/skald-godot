@@ -71,6 +71,7 @@ class SkaldQuery : public godot::RefCounted {
 
 	godot::String method_;
 	godot::Array args_;
+	int line_number_ = 0;
 
 protected:
 	static void _bind_methods();
@@ -81,11 +82,13 @@ public:
 
 	void set_method(const godot::String &p_method);
 	void set_args(const godot::Array &p_args);
+	void set_line_number(int p_line);
 
 	godot::String get_method() const;
 	godot::Array get_args() const;
 	int get_arg_count() const;
 	godot::Variant get_arg(int p_index) const;
+	int get_line_number() const;
 };
 
 class SkaldAction : public godot::RefCounted {
@@ -93,6 +96,7 @@ class SkaldAction : public godot::RefCounted {
 
 	godot::String method_;
 	godot::Array args_;
+	int line_number_ = 0;
 
 protected:
 	static void _bind_methods();
@@ -103,11 +107,13 @@ public:
 
 	void set_method(const godot::String &p_method);
 	void set_args(const godot::Array &p_args);
+	void set_line_number(int p_line);
 
 	godot::String get_method() const;
 	godot::Array get_args() const;
 	int get_arg_count() const;
 	godot::Variant get_arg(int p_index) const;
+	int get_line_number() const;
 };
 
 class SkaldExit : public godot::RefCounted {
@@ -162,6 +168,28 @@ public:
 class SkaldError : public godot::RefCounted {
 	GDCLASS(SkaldError, godot::RefCounted)
 
+public:
+	// Mirrors Skald::ERROR_* codes for matching get_code() in GDScript.
+	enum Code {
+		ERROR_UNKNOWN = 0,
+		ERROR_EOF = 1,
+		ERROR_EMPTY_MODULE = 2,
+		ERROR_MODULE_TAG_NOT_FOUND = 3,
+		ERROR_CHOICE_OUT_OF_BOUNDS = 4,
+		ERROR_CHOICE_UNAVAILABLE = 5,
+		ERROR_EXPECTED_ANSWER = 6,
+		ERROR_RESOLUTION_QUEUE_EMPTY = 7,
+		ERROR_TYPE_MISMATCH = 8,
+		ERROR_UNEXPECTED_NULL = 9,
+		ERROR_VAR_UNDEFINED = 10,
+		ERROR_UNEXPECTED_ACT = 11,
+		ERROR_LOADING_MODULE = 12,
+		ERROR_NO_GLOBAL = 13,
+		ERROR_OUT_OF_BOUNDS = 14,
+		ERROR_START_EMPTY_BLOCK = 15,
+	};
+
+private:
 	int code_ = 0;
 	godot::String message_;
 	int line_number_ = 0;
@@ -210,6 +238,7 @@ class SkaldNotification : public godot::RefCounted {
 
 	godot::String var_name_;
 	godot::String scope_;
+	godot::String mut_type_;
 	godot::Variant value_;
 
 protected:
@@ -221,10 +250,12 @@ public:
 
 	void set_var_name(const godot::String &p_name);
 	void set_scope(const godot::String &p_scope);
+	void set_mut_type(const godot::String &p_type);
 	void set_value(const godot::Variant &p_value);
 
 	godot::String get_var_name() const;
 	godot::String get_scope() const;
+	godot::String get_mut_type() const;
 	bool has_value() const;
 	godot::Variant get_value() const;
 };

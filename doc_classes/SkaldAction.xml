@@ -15,7 +15,10 @@
 			The method name being called.
 		</member>
 		<member name="args" type="Array" setter="" getter="get_args" default="[]">
-			The arguments passed to the method.
+			The arguments passed to the method, fully resolved to [code]bool[/code], [code]int[/code], [code]float[/code], or [code]String[/code] values.
+		</member>
+		<member name="line_number" type="int" setter="" getter="get_line_number" default="0">
+			The script line the call originates from.
 		</member>
 	</members>
 	<methods>

@@ -11,28 +11,6 @@ using namespace godot;
 
 // --- Helpers ---
 
-static Variant rvalue_to_variant(const Skald::RValue &rv) {
-	if (auto *s = std::get_if<std::string>(&rv)) {
-		return String(s->c_str());
-	}
-	if (auto *b = std::get_if<bool>(&rv)) {
-		return *b;
-	}
-	if (auto *i = std::get_if<int>(&rv)) {
-		return *i;
-	}
-	if (auto *f = std::get_if<float>(&rv)) {
-		return (double)*f;
-	}
-	if (auto *v = std::get_if<Skald::Variable>(&rv)) {
-		return String(v->name.c_str());
-	}
-	if (auto *mc = std::get_if<std::shared_ptr<Skald::MethodCall>>(&rv)) {
-		return String((*mc)->dbg_desc().c_str());
-	}
-	return Variant();
-}
-
 static Variant simple_rvalue_to_variant(const Skald::SimpleRValue &rv) {
 	if (auto *s = std::get_if<std::string>(&rv)) {
 		return String(s->c_str());
@@ -121,9 +99,10 @@ static Variant convert_response(Skald::Response &response) {
 			sq->set_method(String(arg.call.method.c_str()));
 			Array args;
 			for (const auto &a : arg.call.args) {
-				args.push_back(rvalue_to_variant(a));
+				args.push_back(simple_rvalue_to_variant(a));
 			}
 			sq->set_args(args);
+			sq->set_line_number((int)arg.line_number);
 			return sq;
 		} else if constexpr (std::is_same_v<T, Skald::MethodCallPost>) {
 			Ref<SkaldAction> sa;
@@ -131,15 +110,16 @@ static Variant convert_response(Skald::Response &response) {
 			sa->set_method(String(arg.call.method.c_str()));
 			Array args;
 			for (const auto &a : arg.call.args) {
-				args.push_back(rvalue_to_variant(a));
+				args.push_back(simple_rvalue_to_variant(a));
 			}
 			sa->set_args(args);
+			sa->set_line_number((int)arg.line_number);
 			return sa;
 		} else if constexpr (std::is_same_v<T, Skald::Exit>) {
 			Ref<SkaldExit> se;
 			se.instantiate();
 			if (arg.argument.has_value()) {
-				se->set_value(rvalue_to_variant(arg.argument.value()));
+				se->set_value(simple_rvalue_to_variant(arg.argument.value()));
 			}
 			return se;
 		} else if constexpr (std::is_same_v<T, Skald::GoModule>) {
@@ -160,6 +140,7 @@ static Variant convert_response(Skald::Response &response) {
 			sn.instantiate();
 			sn->set_var_name(String(arg.var_name.c_str()));
 			sn->set_scope(String(Skald::scope_to_str(arg.scope).c_str()));
+			sn->set_mut_type(String(Skald::Mutation::label_for_type(arg.mut_type).c_str()).to_lower());
 			if (arg.rval.has_value()) {
 				sn->set_value(simple_rvalue_to_variant(arg.rval.value()));
 			}
@@ -173,9 +154,14 @@ static Variant convert_response(Skald::Response &response) {
 // --- SkaldEngine ---
 
 SkaldEngine::SkaldEngine() : engine_(std::make_unique<Skald::Engine>()) {
-	// Route all source reads (initial codex + every GO transition) through
-	// Godot's FileAccess so res:// URIs resolve in both editor and exported
-	// (.pck) builds, where assets never exist on the OS filesystem.
+	install_default_source_reader();
+}
+SkaldEngine::~SkaldEngine() = default;
+
+// Route all source reads (initial codex + every GO transition) through
+// Godot's FileAccess so res:// URIs resolve in both editor and exported
+// (.pck) builds, where assets never exist on the OS filesystem.
+void SkaldEngine::install_default_source_reader() {
 	engine_->set_source_reader(
 			[](const std::string &resolved) -> std::optional<std::string> {
 				String gpath = String(resolved.c_str());
@@ -186,7 +172,25 @@ SkaldEngine::SkaldEngine() : engine_(std::make_unique<Skald::Engine>()) {
 				return std::string(f->get_as_text().utf8().get_data());
 			});
 }
-SkaldEngine::~SkaldEngine() = default;
+
+// Custom reader: Callable takes a path String, returns file text String or
+// null if unreadable. An invalid Callable restores the FileAccess default.
+void SkaldEngine::set_source_reader(const Callable &p_reader) {
+	source_reader_cb_ = p_reader;
+	if (!p_reader.is_valid()) {
+		install_default_source_reader();
+		return;
+	}
+	engine_->set_source_reader(
+			[this](const std::string &resolved) -> std::optional<std::string> {
+				Variant result = source_reader_cb_.call(String(resolved.c_str()));
+				if (result.get_type() != Variant::STRING) {
+					return std::nullopt;
+				}
+				String text = result;
+				return std::string(text.utf8().get_data());
+			});
+}
 
 void SkaldEngine::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("setup", "path"), &SkaldEngine::setup);
@@ -199,6 +203,10 @@ void SkaldEngine::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("answer", "value"), &SkaldEngine::answer);
 	ClassDB::bind_method(D_METHOD("set_global", "key", "value"), &SkaldEngine::set_global);
 	ClassDB::bind_method(D_METHOD("get_global", "key"), &SkaldEngine::get_global);
+	ClassDB::bind_method(D_METHOD("get_project_root"), &SkaldEngine::get_project_root);
+	ClassDB::bind_method(D_METHOD("get_codex_name"), &SkaldEngine::get_codex_name);
+	ClassDB::bind_method(D_METHOD("get_skald_version"), &SkaldEngine::get_skald_version);
+	ClassDB::bind_method(D_METHOD("set_source_reader", "reader"), &SkaldEngine::set_source_reader);
 
 	ClassDB::bind_method(D_METHOD("set_codex_path", "path"), &SkaldEngine::set_codex_path);
 	ClassDB::bind_method(D_METHOD("get_codex_path"), &SkaldEngine::get_codex_path);
@@ -301,4 +309,26 @@ Variant SkaldEngine::get_global(const String &p_key) {
 				(int)err->line_number);
 	}
 	return simple_rvalue_to_variant(std::get<Skald::SimpleRValue>(result));
+}
+
+String SkaldEngine::get_project_root() {
+	if (auto root = engine_->get_project_root()) {
+		return String(root->c_str());
+	}
+	return String();
+}
+
+String SkaldEngine::get_codex_name() {
+	if (auto name = engine_->get_codex_name()) {
+		return String(name->c_str());
+	}
+	return String();
+}
+
+#ifndef SKALD_VERSION
+#define SKALD_VERSION "unknown"
+#endif
+
+String SkaldEngine::get_skald_version() const {
+	return String(SKALD_VERSION);
 }

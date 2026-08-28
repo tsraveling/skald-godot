@@ -62,17 +62,21 @@ void SkaldQuery::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_args"), &SkaldQuery::get_args);
 	ClassDB::bind_method(D_METHOD("get_arg_count"), &SkaldQuery::get_arg_count);
 	ClassDB::bind_method(D_METHOD("get_arg", "index"), &SkaldQuery::get_arg);
+	ClassDB::bind_method(D_METHOD("get_line_number"), &SkaldQuery::get_line_number);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "method"), "", "get_method");
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "args"), "", "get_args");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "line_number"), "", "get_line_number");
 }
 
 void SkaldQuery::set_method(const String &p_method) { method_ = p_method; }
 void SkaldQuery::set_args(const Array &p_args) { args_ = p_args; }
+void SkaldQuery::set_line_number(int p_line) { line_number_ = p_line; }
 
 String SkaldQuery::get_method() const { return method_; }
 Array SkaldQuery::get_args() const { return args_; }
 int SkaldQuery::get_arg_count() const { return args_.size(); }
+int SkaldQuery::get_line_number() const { return line_number_; }
 
 Variant SkaldQuery::get_arg(int p_index) const {
 	if (p_index < 0 || p_index >= args_.size()) {
@@ -88,17 +92,21 @@ void SkaldAction::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_args"), &SkaldAction::get_args);
 	ClassDB::bind_method(D_METHOD("get_arg_count"), &SkaldAction::get_arg_count);
 	ClassDB::bind_method(D_METHOD("get_arg", "index"), &SkaldAction::get_arg);
+	ClassDB::bind_method(D_METHOD("get_line_number"), &SkaldAction::get_line_number);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "method"), "", "get_method");
 	ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "args"), "", "get_args");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "line_number"), "", "get_line_number");
 }
 
 void SkaldAction::set_method(const String &p_method) { method_ = p_method; }
 void SkaldAction::set_args(const Array &p_args) { args_ = p_args; }
+void SkaldAction::set_line_number(int p_line) { line_number_ = p_line; }
 
 String SkaldAction::get_method() const { return method_; }
 Array SkaldAction::get_args() const { return args_; }
 int SkaldAction::get_arg_count() const { return args_.size(); }
+int SkaldAction::get_line_number() const { return line_number_; }
 
 Variant SkaldAction::get_arg(int p_index) const {
 	if (p_index < 0 || p_index >= args_.size()) {
@@ -152,6 +160,23 @@ void SkaldError::_bind_methods() {
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "code"), "", "get_code");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "message"), "", "get_message");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "line_number"), "", "get_line_number");
+
+	BIND_CONSTANT(ERROR_UNKNOWN);
+	BIND_CONSTANT(ERROR_EOF);
+	BIND_CONSTANT(ERROR_EMPTY_MODULE);
+	BIND_CONSTANT(ERROR_MODULE_TAG_NOT_FOUND);
+	BIND_CONSTANT(ERROR_CHOICE_OUT_OF_BOUNDS);
+	BIND_CONSTANT(ERROR_CHOICE_UNAVAILABLE);
+	BIND_CONSTANT(ERROR_EXPECTED_ANSWER);
+	BIND_CONSTANT(ERROR_RESOLUTION_QUEUE_EMPTY);
+	BIND_CONSTANT(ERROR_TYPE_MISMATCH);
+	BIND_CONSTANT(ERROR_UNEXPECTED_NULL);
+	BIND_CONSTANT(ERROR_VAR_UNDEFINED);
+	BIND_CONSTANT(ERROR_UNEXPECTED_ACT);
+	BIND_CONSTANT(ERROR_LOADING_MODULE);
+	BIND_CONSTANT(ERROR_NO_GLOBAL);
+	BIND_CONSTANT(ERROR_OUT_OF_BOUNDS);
+	BIND_CONSTANT(ERROR_START_EMPTY_BLOCK);
 }
 
 void SkaldError::set_code(int p_code) { code_ = p_code; }
@@ -196,11 +221,13 @@ int SkaldParseResult::get_error_count() const { return errors_.size(); }
 void SkaldNotification::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_var_name"), &SkaldNotification::get_var_name);
 	ClassDB::bind_method(D_METHOD("get_scope"), &SkaldNotification::get_scope);
+	ClassDB::bind_method(D_METHOD("get_mut_type"), &SkaldNotification::get_mut_type);
 	ClassDB::bind_method(D_METHOD("has_value"), &SkaldNotification::has_value);
 	ClassDB::bind_method(D_METHOD("get_value"), &SkaldNotification::get_value);
 
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "var_name"), "", "get_var_name");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "scope"), "", "get_scope");
+	ADD_PROPERTY(PropertyInfo(Variant::STRING, "mut_type"), "", "get_mut_type");
 	ADD_PROPERTY(PropertyInfo(Variant::NIL, "value", PROPERTY_HINT_NONE, "",
 					PROPERTY_USAGE_DEFAULT | PROPERTY_USAGE_NIL_IS_VARIANT),
 			"", "get_value");
@@ -208,9 +235,11 @@ void SkaldNotification::_bind_methods() {
 
 void SkaldNotification::set_var_name(const String &p_name) { var_name_ = p_name; }
 void SkaldNotification::set_scope(const String &p_scope) { scope_ = p_scope; }
+void SkaldNotification::set_mut_type(const String &p_type) { mut_type_ = p_type; }
 void SkaldNotification::set_value(const Variant &p_value) { value_ = p_value; }
 
 String SkaldNotification::get_var_name() const { return var_name_; }
 String SkaldNotification::get_scope() const { return scope_; }
+String SkaldNotification::get_mut_type() const { return mut_type_; }
 bool SkaldNotification::has_value() const { return value_.get_type() != Variant::NIL; }
 Variant SkaldNotification::get_value() const { return value_; }

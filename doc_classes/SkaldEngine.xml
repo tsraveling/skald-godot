@@ -86,6 +86,31 @@
 				Returns the value of a global variable defined by the codex, or a [SkaldError] if it is not set.
 			</description>
 		</method>
+		<method name="get_project_root">
+			<return type="String" />
+			<description>
+				Returns the codex's project root directory, or an empty string if no codex is loaded.
+			</description>
+		</method>
+		<method name="get_codex_name">
+			<return type="String" />
+			<description>
+				Returns the loaded codex's filename, or an empty string if no codex is loaded.
+			</description>
+		</method>
+		<method name="get_skald_version" qualifiers="const">
+			<return type="String" />
+			<description>
+				Returns the version of the Skald engine this extension was built against, e.g. [code]"0.6.3"[/code].
+			</description>
+		</method>
+		<method name="set_source_reader">
+			<return type="void" />
+			<param index="0" name="reader" type="Callable" />
+			<description>
+				Overrides how the engine reads codex and module files, for custom filesystems, encrypted content, or remote sources. [param reader] receives a path [String] and must return the file's text as a [String], or [code]null[/code] if it can't be read. Pass an invalid or empty [Callable] to restore the default reader, which resolves [code]res://[/code] paths via [FileAccess] and works in both the editor and exported [code].pck[/code] builds.
+			</description>
+		</method>
 	</methods>
 	<members>
 		<member name="codex_path" type="String" setter="set_codex_path" getter="get_codex_path" default="&quot;&quot;">

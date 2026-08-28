@@ -1,7 +1,19 @@
 #!/usr/bin/env python
 import os
+import subprocess
 
 env = SConscript("godot-cpp/SConstruct")
+
+# Tracked Skald version, from the submodule pin. Exposed to GDScript via
+# SkaldEngine.get_skald_version().
+try:
+    skald_version = subprocess.check_output(
+        ["git", "-C", "skald", "describe", "--tags", "--abbrev=0"],
+        text=True,
+    ).strip()
+except (subprocess.CalledProcessError, OSError):
+    skald_version = "unknown"
+env.Append(CPPDEFINES=[("SKALD_VERSION", '\\"%s\\"' % skald_version)])
 
 # Shared include paths
 env.Append(CPPPATH=[
@@ -24,11 +36,10 @@ if env["platform"] == "windows":
 else:
     skald_env.Append(CXXFLAGS=["-fexceptions", "-std=c++20"])
 
+# Objects go to build/ so the skald submodule tree stays clean.
 skald_sources = [
-    skald_env.SharedObject("skald/src/skald.cpp"),
-    skald_env.SharedObject("skald/src/debug.cpp"),
-    skald_env.SharedObject("skald/src/parse_state.cpp"),
-    skald_env.SharedObject("skald/src/codex_parse_state.cpp"),
+    skald_env.SharedObject("build/skald/" + name, "skald/src/{}.cpp".format(name))
+    for name in ["skald", "debug", "parse_state", "codex_parse_state"]
 ]
 
 # GDExtension wrapper sources (no exceptions needed)

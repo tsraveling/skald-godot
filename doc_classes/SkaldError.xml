@@ -11,7 +11,7 @@
 	</description>
 	<members>
 		<member name="code" type="int" setter="" getter="get_code" default="0">
-			The error code. One of: [code]0[/code] UNKNOWN, [code]1[/code] EOF, [code]2[/code] EMPTY_MODULE, [code]3[/code] MODULE_TAG_NOT_FOUND, [code]4[/code] CHOICE_OUT_OF_BOUNDS, [code]5[/code] CHOICE_UNAVAILABLE, [code]6[/code] EXPECTED_ANSWER, [code]7[/code] RESOLUTION_QUEUE_EMPTY, [code]8[/code] TYPE_MISMATCH, [code]9[/code] UNEXPECTED_NULL, [code]10[/code] VAR_UNDEFINED, [code]11[/code] UNEXPECTED_ACT, [code]12[/code] LOADING_MODULE, [code]13[/code] NO_GLOBAL, [code]14[/code] OUT_OF_BOUNDS, [code]15[/code] START_EMPTY_BLOCK.
+			The error code. Match against the [code]ERROR_*[/code] constants, e.g. [code]if err.code == SkaldError.ERROR_TYPE_MISMATCH[/code].
 		</member>
 		<member name="message" type="String" setter="" getter="get_message" default="&quot;&quot;">
 			The error message.
@@ -20,4 +20,54 @@
 			The line number where the error occurred.
 		</member>
 	</members>
+	<constants>
+		<constant name="ERROR_UNKNOWN" value="0">
+			Unclassified engine error.
+		</constant>
+		<constant name="ERROR_EOF" value="1">
+			The engine ran past the end of the module.
+		</constant>
+		<constant name="ERROR_EMPTY_MODULE" value="2">
+			The loaded module has no content.
+		</constant>
+		<constant name="ERROR_MODULE_TAG_NOT_FOUND" value="3">
+			No block with the requested tag exists in the module.
+		</constant>
+		<constant name="ERROR_CHOICE_OUT_OF_BOUNDS" value="4">
+			[method SkaldEngine.act] was called with an index outside the option group.
+		</constant>
+		<constant name="ERROR_CHOICE_UNAVAILABLE" value="5">
+			The selected option's availability condition is false.
+		</constant>
+		<constant name="ERROR_EXPECTED_ANSWER" value="6">
+			The engine is waiting on [method SkaldEngine.answer] for an open query.
+		</constant>
+		<constant name="ERROR_RESOLUTION_QUEUE_EMPTY" value="7">
+			[method SkaldEngine.answer] was called with no query pending.
+		</constant>
+		<constant name="ERROR_TYPE_MISMATCH" value="8">
+			A value's type does not match its declaration.
+		</constant>
+		<constant name="ERROR_UNEXPECTED_NULL" value="9">
+			A value was unexpectedly missing.
+		</constant>
+		<constant name="ERROR_VAR_UNDEFINED" value="10">
+			A referenced variable is not defined in any scope.
+		</constant>
+		<constant name="ERROR_UNEXPECTED_ACT" value="11">
+			[method SkaldEngine.act] was called when no response was awaiting action.
+		</constant>
+		<constant name="ERROR_LOADING_MODULE" value="12">
+			A module failed to load (e.g. a [code]GO[/code] target could not be read).
+		</constant>
+		<constant name="ERROR_NO_GLOBAL" value="13">
+			The requested global is not declared in the codex.
+		</constant>
+		<constant name="ERROR_OUT_OF_BOUNDS" value="14">
+			An internal index was out of bounds.
+		</constant>
+		<constant name="ERROR_START_EMPTY_BLOCK" value="15">
+			[method SkaldEngine.start_at] targeted a block with no members.
+		</constant>
+	</constants>
 </class>

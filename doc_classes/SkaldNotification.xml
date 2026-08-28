@@ -17,6 +17,9 @@
 		<member name="scope" type="String" setter="" getter="get_scope" default="&quot;&quot;">
 			The scope of the mutated variable: [code]global[/code], [code]module[/code], or [code]local[/code].
 		</member>
+		<member name="mut_type" type="String" setter="" getter="get_mut_type" default="&quot;&quot;">
+			The kind of mutation: [code]equals[/code], [code]switch[/code], [code]add[/code], or [code]subtract[/code].
+		</member>
 		<member name="value" type="Variant" setter="" getter="get_value">
 			The resolved new value of the variable, or [code]null[/code] if none was produced.
 		</member>

@@ -1,5 +1,7 @@
 # skald-godot
 
+**Version: 0.3.2**. Tracks [Skald 0.6.3](https://github.com/tsraveling/skald/releases/tag/0.6.3).
+
 A GDExtension that brings the [Skald](https://github.com/tsraveling/skald) narrative scripting engine into Godot as a native node. Write branching dialogue and interactive fiction in `.ska` files, then drive them from GDScript with a simple load/start/act loop.
 
 ## Installation
@@ -87,6 +89,10 @@ You can also add `SkaldEngine` directly to your scene tree in the editor — it 
 | `answer(value) -> Variant` | Reply to a `SkaldQuery`. Pass `int`, `float`, `String`, `bool`, or `null`. |
 | `set_global(key: String, value) -> Variant` | Set a codex global. Returns `null`, or a `SkaldError`. |
 | `get_global(key: String) -> Variant` | Get a codex global, or a `SkaldError`. |
+| `get_project_root() -> String` | The codex's project root directory, or `""` if no codex is loaded. |
+| `get_codex_name() -> String` | The loaded codex's filename, or `""` if no codex is loaded. |
+| `get_skald_version() -> String` | The Skald engine version this extension was built against, e.g. `"0.6.3"`. |
+| `set_source_reader(reader: Callable)` | Override how codex/module files are read (custom VFS, encryption, remote). `reader` takes a path `String` and returns the file text `String`, or `null` if unreadable. Pass an empty `Callable()` to restore the default `FileAccess` reader, which handles `res://` in editor and exported `.pck` builds. |
 
 `setup()` and `load()` return a **SkaldParseResult** (`ok: bool`, `errors: Array`, `error_count: int`); each entry in `errors` is a Dictionary with `message`, `line`, `column`, `source`, and `severity` (`0` = warning, `1` = error). Globals set via `set_global` / declared in the codex persist across module loads for the engine's lifetime.
 
@@ -120,8 +126,9 @@ Present the options, then call `engine.act(index)` with the chosen index.
 | Property / Method | Type |
 |---|---|
 | `method` | `String` |
-| `args` | `Array` |
+| `args` | `Array` — fully resolved `bool` / `int` / `float` / `String` values |
 | `get_arg(index)` | `Variant` |
+| `line_number` | `int` |
 
 Respond with `engine.answer(value)` where `value` is the appropriate type, or `null`.
 
@@ -133,6 +140,7 @@ Respond with `engine.answer(value)` where `value` is the appropriate type, or `n
 |---|---|
 | `var_name` | `String` |
 | `scope` | `String` — `"global"`, `"module"`, or `"local"` |
+| `mut_type` | `String` — `"equals"`, `"switch"`, `"add"`, or `"subtract"` |
 | `has_value()` | `bool` |
 | `value` | `Variant` — the resolved new value, or `null` |
 
@@ -158,7 +166,7 @@ Handle this by calling `engine.load()` with the new path, then `engine.start()` 
 
 | Property / Method | Type |
 |---|---|
-| `code` | `int` |
+| `code` | `int` — match against the `SkaldError.ERROR_*` constants (e.g. `SkaldError.ERROR_TYPE_MISMATCH`) |
 | `message` | `String` |
 | `line_number` | `int` |
 

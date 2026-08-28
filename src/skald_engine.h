@@ -2,6 +2,7 @@
 #define SKALD_ENGINE_H
 
 #include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/variant/callable.hpp>
 #include <godot_cpp/variant/variant.hpp>
 #include <memory>
 
@@ -15,6 +16,9 @@ class SkaldEngine : public godot::Node {
 	std::unique_ptr<Skald::Engine> engine_;
 	godot::Variant current_response_;
 	godot::String codex_path_;
+	godot::Callable source_reader_cb_;
+
+	void install_default_source_reader();
 
 protected:
 	static void _bind_methods();
@@ -39,6 +43,11 @@ public:
 
 	godot::Variant set_global(const godot::String &p_key, const godot::Variant &p_value);
 	godot::Variant get_global(const godot::String &p_key);
+
+	godot::String get_project_root();
+	godot::String get_codex_name();
+	godot::String get_skald_version() const;
+	void set_source_reader(const godot::Callable &p_reader);
 };
 
 #endif // SKALD_ENGINE_H

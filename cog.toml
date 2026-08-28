@@ -8,7 +8,10 @@ generate_mono_repository_package_tags = true
 branch_whitelist = []
 skip_ci = "[skip ci]"
 skip_untracked = false
-pre_bump_hooks = []
+pre_bump_hooks = [
+    "sed -i '' 's/\\*\\*Version: [0-9]*\\.[0-9]*\\.[0-9]*\\*\\*/**Version: {{version}}**/' README.md",
+    "sh -c 'V=$(git -C skald describe --tags --abbrev=0); sed -i \"\" \"s|Tracks \\[Skald [0-9.]*\\](https://github.com/tsraveling/skald/releases/tag/[0-9.]*)|Tracks [Skald $V](https://github.com/tsraveling/skald/releases/tag/$V)|\" README.md'",
+]
 post_bump_hooks = ["git push", "git push origin {{version}}"]
 pre_package_bump_hooks = []
 post_package_bump_hooks = []
