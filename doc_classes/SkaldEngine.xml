@@ -101,7 +101,7 @@
 		<method name="get_skald_version" qualifiers="const">
 			<return type="String" />
 			<description>
-				Returns the version of the Skald engine this extension was built against, e.g. [code]"0.6.3"[/code].
+				Returns the version of the Skald engine this extension was built against, e.g. [code]"0.7.0"[/code].
 			</description>
 		</method>
 		<method name="set_source_reader">

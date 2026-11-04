@@ -1,6 +1,6 @@
 # skald-godot
 
-**Version: 0.3.3**. Tracks [Skald 0.6.3](https://github.com/tsraveling/skald/releases/tag/0.6.3).
+**Version: 0.4.0**. Tracks [Skald 0.7.0](https://github.com/tsraveling/skald/releases/tag/0.7.0).
 
 A GDExtension that brings the [Skald](https://github.com/tsraveling/skald) narrative scripting engine into Godot as a native node. Write branching dialogue and interactive fiction in `.ska` files, then drive them from GDScript with a simple load/start/act loop.
 
@@ -91,7 +91,7 @@ You can also add `SkaldEngine` directly to your scene tree in the editor — it 
 | `get_global(key: String) -> Variant` | Get a codex global, or a `SkaldError`. |
 | `get_project_root() -> String` | The codex's project root directory, or `""` if no codex is loaded. |
 | `get_codex_name() -> String` | The loaded codex's filename, or `""` if no codex is loaded. |
-| `get_skald_version() -> String` | The Skald engine version this extension was built against, e.g. `"0.6.3"`. |
+| `get_skald_version() -> String` | The Skald engine version this extension was built against, e.g. `"0.7.0"`. |
 | `set_source_reader(reader: Callable)` | Override how codex/module files are read (custom VFS, encryption, remote). `reader` takes a path `String` and returns the file text `String`, or `null` if unreadable. Pass an empty `Callable()` to restore the default `FileAccess` reader, which handles `res://` in editor and exported `.pck` builds. |
 
 `setup()` and `load()` return a **SkaldParseResult** (`ok: bool`, `errors: Array`, `error_count: int`); each entry in `errors` is a Dictionary with `message`, `line`, `column`, `source`, and `severity` (`0` = warning, `1` = error). Globals set via `set_global` / declared in the codex persist across module loads for the engine's lifetime.

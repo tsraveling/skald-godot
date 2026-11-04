@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.0 - 2026-11-04
+#### Features
+- bump to match Skald 0.7.x - (c816589) - Tim Raveling
+
+- - -
+
 ## 0.3.3 - 2026-08-28
 #### Bug Fixes
 - update to track Skald 0.6.3 - (d78b571) - Tim Raveling
